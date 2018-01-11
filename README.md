@@ -11,9 +11,20 @@ Tiny Yolo | [Widerface](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/) | [FDDB
 
 ## Face detection performance evaluation on the FDDB dataset
 
-[![Yolo YOLO](images/Yolo-1400-ContROC.png)]
+### Continuous ROC
 
-[![Tiny YOLO](images/TinyYolo-13000-ContROC.png)] 
+YOLO | Tiny YOLO 
+:---: | :---: | 
+[![YOLO](images/Yolo-1400-ContROC.png)] | [![Tiny YOLO](images/TinyYolo-13000-ContROC.png)]
+
+### Discrete ROC
+
+YOLO | Tiny YOLO 
+:---: | :---: | 
+[![YOLO](images/Yolo-1400-DiscROC.png)] | [![Tiny YOLO](images/TinyYolo-13000-DiscROC.png)] 
+
+
+ 
 
 
     
