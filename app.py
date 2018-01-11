@@ -11,13 +11,17 @@ inWidth = 416
 inHeight = 416
 inScaleFactor = 1 / float(255)
 
+scale_factor = 1.1
+min_neighbors = 3
+min_size = (30, 30)
 face_cascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 
 def detect_face_vj(frame):
     gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
     cv.equalizeHist(gray, gray)
-    faces = face_cascade.detectMultiScale(gray, 1.3, 3)
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=scale_factor, minNeighbors=min_neighbors,
+                                          minSize=min_size, flags=cv.CASCADE_SCALE_IMAGE)
     for (x, y, w, h) in faces:
         cv.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
         label = 'ViolaJones'
