@@ -10,6 +10,20 @@ Check out the video below:
 
 [![Demo](http://img.youtube.com/vi/dkTi8naw67Y/0.jpg)](http://www.youtube.com/watch?v=dkTi8naw67Y)
 
+## Running
+
+You can easily run this demo by cloning this repo and running the `run.sh` script, or with docker directly:
+
+```bash
+xhost + && \
+docker run --privileged --rm -it \
+  -e DISPLAY=unix$DISPLAY \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+   housebw/demo python app.py
+```
+
+The `housebw/demo` docker image includes all necessary dependencies as well as the trained models.
+
 ## Training
 
 There are 2 trained models: one based on YOLOv2 and other on Tiny YOLO. Both using convolutional weights that are pre-trained on Imagenet: 
@@ -27,7 +41,7 @@ YOLOv2 | [Widerface](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/) | [FDDB](h
 Tiny YOLO | [Widerface](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/) | [FDDB](http://vis-www.cs.umass.edu/fddb/) | ? | 60.16 |  [link](https://drive.google.com/open?id=1koNNZv53JXzcgP_5sPMUVlAnB7HW8uLc)
 
 
-## Face detection performance evaluation on the FDDB dataset
+## Face detection performance **evaluation** on the FDDB dataset
 
 ### Continuous ROC
 
