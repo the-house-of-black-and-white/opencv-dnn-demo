@@ -4,6 +4,8 @@ import cv2
 import datetime
 from threading import Thread
 
+import math
+
 
 class FPS:
     def __init__(self):
@@ -38,12 +40,16 @@ class FPS:
 
 
 class WebcamVideoStream:
-    def __init__(self, src, width, height):
+    def __init__(self, src, width=None, height=None):
         # initialize the video camera stream and read the first frame
         # from the stream
         self.stream = cv2.VideoCapture(src)
-        self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-        self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
+        if width is not None:
+            self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+        if height is not None:
+            self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
         (self.grabbed, self.frame) = self.stream.read()
 
         # initialize the variable used to indicate if the thread should
@@ -82,3 +88,73 @@ class WebcamVideoStream:
         return self.stream.get(cv2.CAP_PROP_FRAME_HEIGHT)
 
 
+def iou(bb1, bb2):
+    """
+    Calculate the Intersection over Union (IoU) of two bounding boxes.
+
+    Parameters
+    ----------
+    bb1 : list
+        ['x1', 'x2', 'y1', 'y2']
+        The (x1, y1) position is at the top left corner,
+        the (x2, y2) position is at the bottom right corner
+    bb2 : list
+        ['x1', 'x2', 'y1', 'y2']
+        The (x1, y2) position is at the top left corner,
+        the (x2, y2) position is at the bottom right corner
+
+    Returns
+    -------
+    float
+        in [0, 1]
+    """
+    x1, y1, w1, h1 = bb1
+    x2, y2, w2, h2 = bb2
+
+    # determine the coordinates of the intersection rectangle
+    x_left = max(x1, x2)
+    y_top = max(y1, y2)
+    x_right = min(x1 + w1, x2 + w2)
+    y_bottom = min(y1 + h1, y2 + h2)
+
+    if x_right < x_left or y_bottom < y_top:
+        return 0.0
+
+    # The intersection of two axis-aligned bounding boxes is always an
+    # axis-aligned bounding box
+    intersection_area = (x_right - x_left) * (y_bottom - y_top)
+
+    # compute the area of both AABBs
+    bb1_area = w1 * h1
+    bb2_area = w2 * h2
+
+    # compute the intersection over union by taking the intersection
+    # area and dividing it by the sum of prediction + ground-truth
+    # areas - the interesection area
+    iou = intersection_area / float(bb1_area + bb2_area - intersection_area)
+
+    assert iou >= 0.0
+    assert iou <= 1.0
+
+    return iou
+
+
+def enlarge_roi(frm, bbox, scale=2):
+    height, width, _ = frm.shape
+    x, y, w, h = bbox
+
+    factor = math.sqrt(scale)
+    cx, cy = int(x + w / 2), int(y + h / 2)
+    w2, h2 = int(w * factor), int(h * factor)
+    x2, y2 = int(cx - w2 / 2), int(cy - h2 / 2)
+
+    # x2, y2, w2, h2 = x - padding, y - padding, w + (padding * 2), h + (padding * 2)
+    if x2 < 0:
+        x2 = 0
+    if y2 < 0:
+        y2 = 0
+    if x2 + w2 >= width:
+        w2 = width - x2
+    if y2 + h2 >= height:
+        h2 = height - y2
+    return x2, y2, w2, h2

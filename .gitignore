@@ -103,3 +103,5 @@ ENV/
 .tmp/
 models/
 *.avi
+*.mp4
+*.webm
