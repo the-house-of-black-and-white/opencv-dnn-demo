@@ -50,6 +50,7 @@ if __name__ == '__main__':
 
         faces = face_detector.detect(frame)
         for face in faces:
+            print(face)
             x, y, w, h = enlarge_roi(frame, face)
             sub_face = frame[y:y + h, x:x + w]
             sub_face = cv2.GaussianBlur(sub_face, (103, 103), 100)
