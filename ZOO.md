@@ -3,9 +3,7 @@
 ![Discrete ROC](images/discROC-compare.png) 
 
 A collection of face detection models pre-trained on the [Widerface](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace/) 
-dataset. [Morghulis](https://github.com/the-house-of-black-and-white/morghulis) was used to 
-download and convert it to either [Darknet](https://pjreddie.com/darknet/yolo/) and [Tensorflow Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) format.
-
+dataset. 
 In the table below you can see each model detailed information including:
 
 * a model name
@@ -23,6 +21,10 @@ R-FCN resnet101 | 94.73 |[link](https://drive.google.com/open?id=1is7Ldv9ASYNcrv
 
 
 ## Training details
+
+[Morghulis](https://github.com/the-house-of-black-and-white/morghulis) was used to 
+download and convert it to either [Darknet](https://pjreddie.com/darknet/yolo/) or [Tensorflow Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) format.
+
 
 ### Darknet
 
@@ -47,30 +49,3 @@ on [Google Cloud ML Engine](https://cloud.google.com/ml-engine/docs/technical-ov
 
 ![Continuous ROC](images/contROC-compare.png) 
 
-
-
-## Face detection using YOLOv2
-
-This demo shows 2 face detectors:
-
-1) OpenCVs Viola Jones implementation (red)
-2) YOLOv2 trained on the WIDER FACE dataset (green)
-
-It's using  [OpenCV's dnn module for YOLO inference](https://github.com/opencv/opencv/pull/9705).
-Check out the video below:
-
-[![Demo](http://img.youtube.com/vi/dkTi8naw67Y/0.jpg)](http://www.youtube.com/watch?v=dkTi8naw67Y)
-
-### Running
-
-You can easily run this demo by cloning this repo and running the `run.sh` script, or with docker directly:
-
-```bash
-xhost + && \
-docker run --privileged --rm -it \
-  -e DISPLAY=unix$DISPLAY \
-  -v /tmp/.X11-unix:/tmp/.X11-unix \
-   housebw/demo python app.py
-```
-
-The `housebw/demo` docker image includes all necessary dependencies as well as the trained models.
