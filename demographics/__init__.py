@@ -28,7 +28,7 @@ class CaffeClassifier:
         # sort the probabilities (in descending) order, grab the index of the
         # top predicted label, and draw it on the input image
         idx = np.argsort(preds[0])[::-1][0]
-        return self.classes[idx], preds[0][idx] * 100
+        return self.classes[idx], preds[0][idx]
 
     def classify_all(self, image, bboxes):
         images = []
@@ -49,6 +49,8 @@ class CaffeClassifier:
             # sort the probabilities (in descending) order, grab the index of the
             # top predicted label, and draw it on the input image
             idx = np.argsort(preds[0])[::-1][0]
-            result.append((self.classes[idx], pred[idx] * 100))
+            result.append((self.classes[idx], pred[idx]))
 
         return result
+
+

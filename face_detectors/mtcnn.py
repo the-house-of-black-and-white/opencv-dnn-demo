@@ -15,7 +15,7 @@ class MTCNNFaceDetector(FaceDetector):
         self.detector = MTCNN()
         self.min_confidence = min_confidence
 
-    def detect(self, image):
+    def detect(self, image, include_score=False):
         try:
             faces = [f['box'] for f in self.detector.detect_faces(image) if f['confidence'] >= self.min_confidence]
         except InvalidImage:

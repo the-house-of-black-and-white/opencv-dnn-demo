@@ -148,7 +148,6 @@ def enlarge_roi(frm, bbox, scale=2):
     w2, h2 = int(w * factor), int(h * factor)
     x2, y2 = int(cx - w2 / 2), int(cy - h2 / 2)
 
-    # x2, y2, w2, h2 = x - padding, y - padding, w + (padding * 2), h + (padding * 2)
     if x2 < 0:
         x2 = 0
     if y2 < 0:
@@ -157,4 +156,5 @@ def enlarge_roi(frm, bbox, scale=2):
         w2 = width - x2
     if y2 + h2 >= height:
         h2 = height - y2
+
     return x2, y2, w2, h2

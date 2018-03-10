@@ -23,7 +23,7 @@ class YOLOV2FaceDetector(FaceDetector):
         if self.net.empty():
             exit(1)
 
-    def detect(self, image):
+    def detect(self, image, include_score=False):
         blob = cv2.dnn.blobFromImage(image, inScaleFactor, (inWidth, inHeight), (0, 0, 0), True, False)
         self.net.setInput(blob)
         detections = self.net.forward()
@@ -40,5 +40,8 @@ class YOLOV2FaceDetector(FaceDetector):
                 ymin = int(round(y_center - height / 2))
                 # xmax = int(round(x_center + width / 2))
                 # ymax = int(round(y_center + height / 2))
-                faces.append([xmin, ymin, int(width), int(height)])
+                if include_score:
+                    faces.append([xmin, ymin, int(width), int(height), confidence])
+                else:
+                    faces.append([xmin, ymin, int(width), int(height)])
         return faces

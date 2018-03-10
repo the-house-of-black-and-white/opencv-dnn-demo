@@ -8,7 +8,7 @@ class FaceDetector:
         pass
 
     @abstractmethod
-    def detect(self, image):
+    def detect(self, image, include_score=False):
         pass
 
     @abstractproperty

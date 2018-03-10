@@ -22,7 +22,7 @@ class BaseTensorflowFaceDetector(FaceDetector):
                 tf.import_graph_def(od_graph_def, name='')
             self.sess = tf.Session(graph=self.detection_graph)
 
-    def detect(self, image):
+    def detect(self, image, include_score=False):
         # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
         image_np_expanded = np.expand_dims(image, axis=0)
         image_tensor = self.detection_graph.get_tensor_by_name('image_tensor:0')
@@ -41,20 +41,20 @@ class BaseTensorflowFaceDetector(FaceDetector):
             [boxes, scores, classes, num_detections],
             feed_dict={image_tensor: image_np_expanded})
 
-        # print('Boxes: {}'.format(boxes))
         boxes = np.squeeze(boxes)
-        # print('Boxes squeezed: {}'.format(boxes))
         scores = np.squeeze(scores)
         faces = []
-
+        im_height, im_width, _ = image.shape
         for i in range(boxes.shape[0]):
-            if scores[i] > self.min_confidence:
+            if scores[i] >= self.min_confidence:
                 ymin, xmin, ymax, xmax = tuple(boxes[i].tolist())
-                im_height, im_width, _ = image.shape
                 (left, right, top, bottom) = (xmin * im_width, xmax * im_width,
                                               ymin * im_height, ymax * im_height)
 
-                faces.append([int(left), int(top), int(right - left), int(bottom - top)])
+                if include_score:
+                    faces.append([int(left), int(top), int(right - left), int(bottom - top), scores[i]])
+                else:
+                    faces.append([int(left), int(top), int(right - left), int(bottom - top)])
 
         return faces
 
@@ -75,7 +75,7 @@ class FasterRCNNFaceDetector(BaseTensorflowFaceDetector):
     def name(self):
         return 'fasterRCNN'
 
-    def __init__(self, min_confidence, checkpoint='models/tf/faster_rcnn_/frozen_inference_graph.pb'):
+    def __init__(self, min_confidence, checkpoint='models/tf/faster_rcnn_inception_resnet_v2_atrous_65705/frozen_inference_graph.pb'):
         super(FasterRCNNFaceDetector, self).__init__(min_confidence, checkpoint=checkpoint)
 
 

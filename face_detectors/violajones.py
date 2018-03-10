@@ -15,7 +15,7 @@ class ViolaJonesFaceDetector(FaceDetector):
         self.min_size = (30, 30)
         self.face_cascade = cv.CascadeClassifier(cv.data.haarcascades + "haarcascade_frontalface_default.xml")
 
-    def detect(self, frame):
+    def detect(self, frame, include_score=False):
         gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
         cv.equalizeHist(gray, gray)
         faces = self.face_cascade.detectMultiScale(gray, scaleFactor=self.scale_factor, minNeighbors=self.min_neighbors,
